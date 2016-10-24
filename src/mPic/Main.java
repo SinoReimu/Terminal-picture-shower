@@ -63,7 +63,7 @@ public class Main {
 		StringBuilder sb = new StringBuilder();
 		sb.append("\\033[");
 		sb.append(40+k);
-		sb.append(";3m   \\033[0m");
+		sb.append(";3m  \\033[0m");
 		return sb.toString();
 	}
 	private static int handle (int[][] x, int y,int xs){
