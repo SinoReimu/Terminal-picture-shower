@@ -47,6 +47,7 @@ public class Main {
                 }
             }
 			StringBuilder sb2 = new StringBuilder();
+
 			for (int indexY = 0; indexY<hei-1;indexY+=2) { 
 				sb2.append("echo -e \"");
 				sb2.append(geti(out [indexY], out [indexY+1], wid));
