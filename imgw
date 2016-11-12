@@ -1,0 +1,5 @@
+mkdir .temp
+let height=${2}/4*3
+echo $height
+java -cp bin mPic.Main $1 $2 $height ./.temp/pic
+./.temp/pic

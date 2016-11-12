@@ -25,7 +25,7 @@ public class Main {
 			if (!heiss.equals("def"))
 				hei = Integer.parseInt(heiss);
             BufferedImage bf = ImagetoArrayUtils.readImage(as);
-			int[][] out = new int[hei][wid];
+			int[][][] out = new int[hei][wid][3];
             int[][] rgbArray1 = ImagetoArrayUtils.convertImageToArray(bf);
 	    	StringBuilder sb = new StringBuilder();
 
@@ -47,11 +47,9 @@ public class Main {
                 }
             }
 			StringBuilder sb2 = new StringBuilder();
-			for (int indexY = 0; indexY<hei;indexY++) {
-				sb2.append("echo \"");
-                for (int indexX = 0; indexX<wid; indexX++) {
-					sb2.append(geti(out[indexY][indexX]));
-				}
+			for (int indexY = 0; indexY<hei-1;indexY+=2) { 
+				sb2.append("echo -e \"");
+				sb2.append(geti(out [indexY], out [indexY+1], wid));
 				sb2.append("\";");
 			}
 			System.out.println("[HANDLE] make the picture finished, writing data to "+outpath);
@@ -59,27 +57,42 @@ public class Main {
 			System.out.println("[HINT] data saving finished , run "+outpath+" to view the picture.");
 			
     }
-	private static String geti (int k){
+	private static String geti (int[][] o1, int[][] o2, int width){
 		StringBuilder sb = new StringBuilder();
-		sb.append("\\033[");
-		sb.append(40+k);
-		sb.append(";3m   \\033[0m");
+		for (int i=0;i<width;i++) {
+			//\x1b[38;2;%d;%d;%dm\u2580
+			sb.append("\\x1b[38;2;");
+			sb.append(o1[i][0]);
+			sb.append(";");
+			sb.append(o1[i][1]);
+			sb.append(";");
+			sb.append(o1[i][2]);
+			sb.append("m\\x1b[48;2;");
+			sb.append(o2[i][0]);
+			sb.append(";");
+			sb.append(o2[i][1]);
+			sb.append(";");
+			sb.append(o2[i][2]);
+			sb.append("m\u2580");		
+		}
+	
 		return sb.toString();
 	}
-	private static int handle (int[][] x, int y,int xs){
+	private static int[] handle (int[][] x, int y,int xs){
 				int r=0,g=0,b=0;
+				int o[] = new int[3];
 				for(int iy = 0;iy<y;iy++)
 						for(int ix=0;ix<xs;ix++){
-							int a[] = ImagetoArrayUtils.convertARGBToRGB(x[iy][ix]);
-							r+=a[0];
-							g+=a[1];
-							b+=a[2];			
+							int a[] = ImagetoArrayUtils.convertARGBToARGB(x[iy][ix]);
+							r+=a[1];
+							g+=a[2];
+							b+=a[3];			
 						}
 				r/=(xs*y);b/=(xs*y);g/=(xs*y);
-					if (r>128) r = 1; else r = 0;
-					if (g>128) g = 2; else g = 0;
-					if (b>128) b = 4; else b = 0;
-				return r+g+b;
+				o[0] = r;
+				o[1] = g;
+				o[2] = b;
+				return o;
 	}
     public static void write (String content, String out) {
         try {

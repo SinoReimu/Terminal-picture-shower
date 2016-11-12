@@ -149,15 +149,17 @@ public class ImagetoArrayUtils {
 
     }
 
-    public static int[] convertARGBToRGB(int ARGB) {
+    public static int[] convertARGBToARGB(int ARGB) {
 
-        int[] rgb = new int[3];
+        int[] rgb = new int[4];
 
-        rgb[0] = (ARGB & 0xff0000) >> 16;
+		rgb[0] = (ARGB >> 24) & 0xff;		
+		
+        rgb[1] = (ARGB >> 16) & 0xff;
 
-        rgb[1] = (ARGB & 0xff00) >> 8;
+        rgb[2] = (ARGB >> 8) & 0xff;
 
-        rgb[2] = (ARGB & 0xff);
+        rgb[3] = ARGB & 0xff;
 
         return rgb;
 

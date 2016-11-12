@@ -1,0 +1,3 @@
+mkdir .temp
+java -cp bin mPic.Main $1 def def ./.temp/pic
+./.temp/pic
